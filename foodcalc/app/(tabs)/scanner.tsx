@@ -12,7 +12,7 @@ import { useNavigation } from 'expo-router';
 
 export default function TabTwoScreen() {
     const [isActive, setActive] = useState<boolean>(true);
-    const [testo, setJson] = useState<ProductDTO>({name: "null", kcal: -1});
+    const [product, setJson] = useState<ProductDTO>({name: "null", kcal: -1});
 
     let CameraView: React.FC<CameraViewProps>;
     if (Platform.OS !== 'web') {
@@ -36,7 +36,7 @@ export default function TabTwoScreen() {
     );
     const confirmInsert = () => {
         navigation.navigate("index",  {
-            itemId: testo
+            product: product
           })
     }
     return (
@@ -50,8 +50,8 @@ export default function TabTwoScreen() {
             }>
             <ThemedView>
                 <CameraView isActive={isActive} setJson={setJson} setActivate={setActive} />
-                <ThemedText>{testo.name}</ThemedText>
-                <ThemedText>{testo.kcal}</ThemedText>
+                <ThemedText>{product.name}</ThemedText>
+                <ThemedText>{product.kcal}</ThemedText>
                 <Button
                     onPress={confirmInsert}
                     title="Confirm"

@@ -10,14 +10,14 @@ import React from 'react';
 export default function HomeScreen() {
 
   type RootStackParamList = {
-    index: { itemId: string };
+    index: { product: string };
   };
   const route = useRoute<RouteProp<RootStackParamList, 'index'>>();
   useFocusEffect(
     React.useCallback(() => {
       console.log("focused")
 
-      console.log(route?.params?.itemId)
+      console.log(route?.params?.product)
 
       return () => {
         console.log("unfocused")
@@ -34,7 +34,7 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedText>{JSON.stringify(route?.params?.itemId)}</ThemedText>
+      <ThemedText>{JSON.stringify(route?.params?.product)}</ThemedText>
     </ParallaxScrollView>
   );
 }
