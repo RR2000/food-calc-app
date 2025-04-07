@@ -1,45 +1,48 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, FlatList, SafeAreaView, StatusBar } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { RouteProp, useFocusEffect, useRoute } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ProductDTO } from '@/dtos/ProductDTO';
 
 export default function HomeScreen() {
 
   type RootStackParamList = {
-    index: { product: string };
+    index: { product: ProductDTO };
   };
+
+  const [productList, setProductList] = useState<Set<ProductDTO>>(new Set<ProductDTO>())
   const route = useRoute<RouteProp<RootStackParamList, 'index'>>();
   useFocusEffect(
     React.useCallback(() => {
-      console.log("focused")
-
-      console.log(route?.params?.product)
+      if (route?.params?.product) {
+        setProductList(prev => new Set([...prev, route.params.product]));
+      }
 
       return () => {
-        console.log("unfocused")
+       
       };
-    }, [])
+    }, [route?.params?.product])
   );
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedText>{JSON.stringify(route?.params?.product)}</ThemedText>
-    </ParallaxScrollView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <FlatList data={[...productList]} renderItem={({ item }) => <ThemedText>{item.name} - {item.kcal}</ThemedText>} />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
