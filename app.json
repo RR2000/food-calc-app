@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "foodcalc",
+    "slug": "foodcalc",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "dev.raoulrondinella.foodcalc"
+    },
+    "android": {
+      "package": "dev.raoulrondinella.foodcalc",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1e7a46"
+      }
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/favicon.png",
+      "name": "foodcalc",
+      "shortName": "foodcalc",
+      "description": "Calories from the barcode: scan a product, say how much, see the day's total.",
+      "themeColor": "#1e7a46",
+      "backgroundColor": "#f4f6f3"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "foodcalc uses the camera to read the barcode on the package.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ]
+    ]
+  }
+}
