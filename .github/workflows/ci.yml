@@ -1,7 +1,8 @@
 name: CI
 
 # PR and main: type check, unit tests and the web build (Expo export).
-# main: image on GitHub Container Registry, ghcr.io/rr2000/foodcalcfe:sha-<commit> and :main.
+# main: image on GitHub Container Registry, :sha-<commit> and :main, under two names during the rename:
+# ghcr.io/rr2000/food-calc-app (new, like the repo) and ghcr.io/rr2000/foodcalcfe (old).
 on:
   push:
     branches: [main]
@@ -52,7 +53,9 @@ jobs:
           tags: |
             ghcr.io/rr2000/foodcalcfe:${{ steps.tag.outputs.tag }}
             ghcr.io/rr2000/foodcalcfe:main
+            ghcr.io/rr2000/food-calc-app:${{ steps.tag.outputs.tag }}
+            ghcr.io/rr2000/food-calc-app:main
           labels: |
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.source=https://github.com/RR2000/food-calc-app
           cache-from: type=gha
           cache-to: type=gha,mode=max
