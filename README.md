@@ -40,6 +40,5 @@ On the web the API is expected on the same origin (`/api`); a phone build uses t
 
 ## Image
 
-The CI publishes `ghcr.io/rr2000/food-calc-app:main` (and `:sha-<commit>`) at every push on `main` (during the
-rename the same tags also go under the old name `ghcr.io/rr2000/foodcalcfe`): nginx with
+The CI publishes `ghcr.io/rr2000/food-calc-app:main` (and `:sha-<commit>`) at every push on `main`: nginx with
 the web app on `/` and `/api` passed to the service `api` on port 8080 (the backend image).
