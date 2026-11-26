@@ -1,4 +1,4 @@
-# foodcalc
+# Food Calc
 
 Calories of what you eat, from the barcode on the package: scan it (or type it), say how much you ate, see
 the total of the day. Product data come from [Open Food Facts](https://world.openfoodfacts.org) through the
