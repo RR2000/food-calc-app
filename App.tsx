@@ -37,7 +37,7 @@ const SAMPLES = [
   { name: 'Coca-Cola', barcode: '5449000000996' },
   { name: 'Barilla n.5', barcode: '8076800195057' },
 ];
-const SOURCE = 'https://github.com/RR2000/foodcalcfe';
+const SOURCE = 'https://github.com/RR2000/food-calc-app';
 
 type Lookup =
   | { status: 'idle' }

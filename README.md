@@ -2,7 +2,7 @@
 
 Calories of what you eat, from the barcode on the package: scan it (or type it), say how much you ate, see
 the total of the day. Product data come from [Open Food Facts](https://world.openfoodfacts.org) through the
-small API in [foodcalc](https://github.com/RR2000/foodcalc).
+small API in [food-calc-backend](https://github.com/RR2000/food-calc-backend).
 
 Demo: https://kcal.raoulrondinella.dev - it starts empty; on a phone tap "Scan with the camera" and allow
 the camera, on a PC type a barcode or try one of the sample products.
@@ -40,5 +40,6 @@ On the web the API is expected on the same origin (`/api`); a phone build uses t
 
 ## Image
 
-The CI publishes `ghcr.io/rr2000/foodcalcfe:main` (and `:sha-<commit>`) at every push on `main`: nginx with
+The CI publishes `ghcr.io/rr2000/food-calc-app:main` (and `:sha-<commit>`) at every push on `main` (during the
+rename the same tags also go under the old name `ghcr.io/rr2000/foodcalcfe`): nginx with
 the web app on `/` and `/api` passed to the service `api` on port 8080 (the backend image).
