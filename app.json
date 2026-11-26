@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "foodcalc",
-    "slug": "foodcalc",
+    "name": "Food Calc",
+    "slug": "food-calc-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,8 +20,8 @@
     "web": {
       "output": "single",
       "favicon": "./assets/favicon.png",
-      "name": "foodcalc",
-      "shortName": "foodcalc",
+      "name": "Food Calc",
+      "shortName": "Food Calc",
       "description": "Calories from the barcode: scan a product, say how much, see the day's total.",
       "themeColor": "#1e7a46",
       "backgroundColor": "#f4f6f3"
@@ -30,7 +30,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "foodcalc uses the camera to read the barcode on the package.",
+          "cameraPermission": "Food Calc uses the camera to read the barcode on the package.",
           "microphonePermission": false,
           "recordAudioAndroid": false
         }

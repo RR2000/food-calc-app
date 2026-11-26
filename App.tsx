@@ -107,7 +107,7 @@ function Home() {
             </View>
             <View style={{ flexShrink: 1 }}>
               <Text style={s.title} accessibilityRole="header">
-                foodcalc
+                Food Calc
               </Text>
               <Text style={s.muted}>{t.tagline}</Text>
             </View>
