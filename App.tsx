@@ -38,6 +38,12 @@ const SAMPLES = [
   { name: 'Barilla n.5', barcode: '8076800195057' },
 ];
 const SOURCE = 'https://github.com/RR2000/food-calc-app';
+// On the web a real <a href> (react-native-web renders a Text with href as a link: new tab, crawlers, copy link);
+// on the phone the system browser.
+const SOURCE_LINK =
+  Platform.OS === 'web'
+    ? ({ href: SOURCE, hrefAttrs: { target: '_blank', rel: 'noopener' } } as object)
+    : { onPress: () => Linking.openURL(SOURCE) };
 
 type Lookup =
   | { status: 'idle' }
@@ -163,7 +169,7 @@ function Home() {
 
           <Text style={[s.muted, s.footer]}>
             {t.footer}{' '}
-            <Text style={s.link} accessibilityRole="link" onPress={() => Linking.openURL(SOURCE)}>
+            <Text style={s.link} accessibilityRole="link" {...SOURCE_LINK}>
               {t.source}
             </Text>
           </Text>
