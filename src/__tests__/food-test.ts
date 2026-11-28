@@ -9,6 +9,8 @@ import {
   type Product,
   quickAmounts,
   scale,
+  toPer100g,
+  toProduct,
   totals,
   unitOf,
 } from '../food';
@@ -96,5 +98,52 @@ describe('diary', () => {
     expect(parseDiary('not json')).toEqual([]);
     expect(parseDiary('{"a":1}')).toEqual([]);
     expect(parseDiary(null)).toEqual([]);
+  });
+});
+
+describe('first use and odd data', () => {
+  it('an empty day sums to zeros, never NaN', () => {
+    expect(totals(parseDiary(null))).toEqual({ kcal: 0, protein: 0, carbs: 0, fat: 0 });
+  });
+
+  it('a product with only the barcode becomes a product with nulls', () => {
+    expect(toProduct({}, '9000000000001')).toEqual({
+      barcode: '9000000000001',
+      name: null,
+      brand: null,
+      quantity: null,
+      imageUrl: null,
+      per100g: { kcal: null, protein: null, carbs: null, sugars: null, fat: null, salt: null },
+    });
+    expect(toProduct({ barcode: '1', name: '  ', per100g: null }, '9')?.name).toBeNull();
+  });
+
+  it('what is not a product is null', () => {
+    for (const data of [null, undefined, 'html', 42, []]) {
+      expect(toProduct(data, '9000000000001')).toBeNull();
+    }
+  });
+
+  it('nutrients that are not real numbers are unknown', () => {
+    expect(toPer100g({ kcal: 'abc', protein: NaN, carbs: Infinity, sugars: -1, fat: 0, salt: 1.2 })).toEqual({
+      kcal: null,
+      protein: null,
+      carbs: null,
+      sugars: null,
+      fat: 0,
+      salt: 1.2,
+    });
+    expect(toPer100g(undefined)).toEqual(toPer100g({}));
+  });
+
+  it('a diary saved with odd values reads back without NaN in the sums', () => {
+    const good = newEntry(product(), 100, '2026-11-25', 'x');
+    const odd = { ...good, id: 'odd', brand: undefined, per100g: { kcal: 'abc', protein: null } };
+    const diary = parseDiary(JSON.stringify([odd, { ...good, id: 'nan', amount: 'NaN' }]));
+    expect(diary).toHaveLength(1);
+    expect(diary[0].brand).toBeNull();
+    const sum = totals(diary);
+    expect(Object.values(sum).every(Number.isFinite)).toBe(true);
+    expect(sum.kcal).toBe(0);
   });
 });

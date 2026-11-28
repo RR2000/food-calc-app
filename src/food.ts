@@ -35,6 +35,38 @@ export type Entry = {
 
 export type Totals = { kcal: number; protein: number; carbs: number; fat: number };
 
+const NUTRIENTS = ['kcal', 'protein', 'carbs', 'sugars', 'fat', 'salt'] as const;
+
+/** A value per 100 g only if it is a real number (not NaN, not a string, not negative); otherwise unknown. */
+function nutrient(value: unknown): number | null {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
+}
+
+/** Any object (or nothing) -> per 100 g values where every missing or odd value is null, never undefined or NaN. */
+export function toPer100g(data: unknown): Per100g {
+  const o = (data != null && typeof data === 'object' ? data : {}) as Record<string, unknown>;
+  return Object.fromEntries(NUTRIENTS.map((k) => [k, nutrient(o[k])])) as Per100g;
+}
+
+const text = (value: unknown): string | null => (typeof value === 'string' && value.trim() ? value : null);
+
+/**
+ * The backend answer checked field by field: a product with no name, brand or nutrients is still a product,
+ * with nulls. Null when it is not a product at all (e.g. an HTML page instead of JSON).
+ */
+export function toProduct(data: unknown, barcode: string): Product | null {
+  if (data == null || typeof data !== 'object' || Array.isArray(data)) return null;
+  const o = data as Record<string, unknown>;
+  return {
+    barcode: text(o.barcode) ?? barcode,
+    name: text(o.name),
+    brand: text(o.brand),
+    quantity: text(o.quantity),
+    imageUrl: text(o.imageUrl),
+    per100g: toPer100g(o.per100g),
+  };
+}
+
 /** What a barcode looks like: 6 to 14 digits (EAN-13, EAN-8, UPC-A, UPC-E, in-store codes). */
 export function isBarcode(text: string): boolean {
   return /^\d{6,14}$/.test(text);
@@ -132,11 +164,12 @@ export function parseDiary(json: string | null): Entry[] {
         typeof e.day === 'string' &&
         typeof e.name === 'string' &&
         typeof e.amount === 'number' &&
+        Number.isFinite(e.amount) &&
         e.amount > 0 &&
         (e.unit === 'g' || e.unit === 'ml') &&
         e.per100g != null &&
         typeof e.per100g === 'object',
-    );
+    ).map((e) => ({ ...e, brand: text(e.brand), per100g: toPer100g(e.per100g) }));
   } catch {
     return [];
   }

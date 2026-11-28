@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import type { Product } from './food';
+import { type Product, toProduct } from './food';
 
 /**
  * Where the backend is. On the web the app and the API share the origin (nginx passes /api on), so the
@@ -28,5 +28,13 @@ export async function lookup(barcode: string, fetchFn: typeof fetch = fetch): Pr
   if (response.status === 404) throw new LookupError('not-found');
   if (response.status === 400) throw new LookupError('invalid');
   if (!response.ok) throw new LookupError('unavailable');
-  return (await response.json()) as Product;
+  let product: Product | null;
+  try {
+    product = toProduct(await response.json(), barcode);
+  } catch {
+    // not JSON: a proxy or error page answered instead of the backend
+    product = null;
+  }
+  if (!product) throw new LookupError('unavailable');
+  return product;
 }
